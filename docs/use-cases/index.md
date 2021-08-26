@@ -6,52 +6,16 @@ The following are some typical cases to explore how SLSA compliance can provide 
 
 </span>
 
-<table class="link-tree use-cases">
-<tr>
-<td>
+<span class="use-cases">
 
-[Publishing a software package](/publishing-a-software-package.md)
-How a developer can protect their users from malicious changes to the software they publish
+-   [Publishing a software package](/publishing-a-software-package.md) How a developer can protect their users from malicious changes to the software they publish
+-   [Consuming third party software](/consuming-third-party-software.md) How a developer can work with third party software suppliers to reduce risk in a supply chain
+-   [Package repository accepting a package](/package-repository-accepting-a-software-package.md) How a repository can protect their users from malicious changes to software artifacts published in their repository
+-   [IN DEVELOPMENT]: Checking an artifact’s SLSA level
+-   [IN DEVELOPMENT]: Determining a package’s intent
+-   [IN DEVELOPMENT]: Automatically verifying software
 
-</td>
-</tr>
-<tr>
-<td>
-
-[Consuming third party software](/consuming-third-party-software.md)
-How a developer can work with third party software suppliers to reduce risk in a supply chain
-
-</td>
-</tr>
-<tr>
-<td>
-
-[Package repository accepting a package](/package-repository-accepting-a-software-package.md)
-How a repository can protect their users from malicious changes to software artifacts published in their repository
-
-</td>
-</tr>
-<tr>
-<td>
-
-[IN DEVELOPMENT]: Checking an artifact’s SLSA level
-
-</td>
-</tr>
-<tr>
-<td>
-
-[IN DEVELOPMENT]: Determining a package’s intent
-
-</td>
-</tr>
-<td>
-
-[IN DEVELOPMENT]: Automatically verifying software
-</td>
-</tr>
-
-</table>
+</span>
 
 For a [full example](../example.md) that explores edge cases in greater detail, we created a use case for using curl through its official docker image.
 
