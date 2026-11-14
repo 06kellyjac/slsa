@@ -1,7 +1,16 @@
 .bundle
 .DS_store
 .jekyll-cache
+.jekyll-metadata
 .sass-cache
-_site
 node_modules
-/docs/vendor
+/www/vendor/bundle
+/www/spec
+_site
+
+# Ignore the following files markdownlint that are already tracked by git (thus
+# uanffected by gitignore).
+/LICENSE.md
+
+# Local Netlify folder
+.netlify

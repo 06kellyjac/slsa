@@ -3,14 +3,107 @@
 Thank you for your interest in contributing to SLSA. Please ensure you abide by
 our [Code of Conduct](code-of-conduct.md) when engaging with the SLSA community.
 
-The SLSA project is authored on GitHub using
-[Issues](https://github.com/slsa-framework/slsa/issues) to describe proposed
-work and [Pull Requests](https://github.com/slsa-framework/slsa/pulls) to submit
-changes.
+The SLSA project is authored on GitHub using [Issues] to describe proposed work
+and [Pull Requests] to submit changes.
+
+If you would like to contribute to the SLSA Blog, please see: https://github.com/slsa-framework/governance/blob/main/6._Contributing.md
 
 For other ways to engage with the SLSA community, see our [README](README.md).
 
-## Contributing changes
+[Issues]: https://github.com/slsa-framework/slsa/issues
+[Pull Requests]: https://github.com/slsa-framework/slsa/pulls
+
+## Finding a good first issue
+
+If you want to start helping but are unsure which issue might be good - you can look for issues with the label [`website`](https://github.com/slsa-framework/slsa/labels/website) if you have Jekyll, CSS, or design knowledge, these changes do not require in depth understanding of the SLSA specifications.
+
+Alternately you can look for issues with a [`shovel-ready`](https://github.com/slsa-framework/slsa/labels/shovel-ready) label, these should be well-defined and ready to be worked on.
+
+## Proposing changes
+
+If a change is small enough to be fully discussed in a pull request, jump
+straight to [Submitting changes].
+
+Otherwise, we recommend the following process to propose and reach agreement on
+changes:
+
+1.  The proposer finds or creates a [GitHub Issue][Issues] describing the
+    problem and proposes an idea to address that problem.
+
+2.  The community discusses and refines the idea, guided by the steering
+    committee.
+
+3.  If supplemental documents are needed, the proposer creates a
+    [proposal document] to describe the proposal and references the document
+    from the Issue. This can be valuable in cases where the topic is too complex
+    to fully describe in an Issue comment.
+
+4.  Once there is general agreement that the proposal is sound, the proposer
+    [submits][submitting changes] a pull request implementing the idea. Final
+    agreement happens on the pull request.
+
+[proposal document]: https://github.com/slsa-framework/slsa-proposals
+
+## Submitting changes
+
+[submitting changes]: #submitting-changes
+
+All changes require peer review through GitHub's pull request (PR) feature.
+
+### Using the DevContainer
+
+The SLSA project provides a [DevContainer](https://code.visualstudio.com/docs/remote/devcontainerjson-reference) configuration to simplify the development setup. This allows contributors to work in a consistent environment without needing to manually install dependencies or configure their local machines.
+
+#### GitHub Codespaces
+
+[GitHub Codespaces](https://github.com/features/codespaces) offers an easy way to get started with SLSA development:
+
+1.  Navigate to the [SLSA GitHub repository](https://github.com/slsa-framework/slsa)
+2.  Click the "Code" button
+3.  Select the "Codespaces" tab
+4.  Click "Create codespace on main"
+
+This will launch a browser-based VS Code environment with all the necessary tools pre-installed. **The initial setup may take a few minutes as the container is built.**
+
+#### VS Code with DevContainers
+
+If you prefer to work locally, you can use VS Code with the DevContainers extension:
+
+1.  Install [Docker](https://www.docker.com/products/docker-desktop/) on your system
+2.  Install [Visual Studio Code](https://code.visualstudio.com/)
+3.  Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+4.  Clone the SLSA repository
+5.  Open the cloned repository in VS Code
+6.  When prompted, click "Reopen in Container" or use the command palette (F1) and select "Dev Containers: Reopen in Container"
+
+VS Code will build the container and configure the development environment automatically. **The initial setup may take a few minutes as the container is built.**
+
+Once done, you can open a Terminal and launch the development server in the DevContainer with the following command:
+
+```shell
+cd www
+../tools/combine-versions.sh
+bundle exec jekyll serve
+netlify dev -c 'bundle exec jekyll serve --livereload --incremental'
+```
+
+### Deploying the site locally
+
+For detailed instructions on building and testing the site locally, see [www/README.md](www/README.md#building-and-testing-locally).
+
+Quick start (from the repository root):
+
+```shell
+cd www
+../tools/combine-versions.sh
+netlify dev
+```
+
+Then browse to http://localhost:8888 to view the site locally.
+
+### Deploying the site in production
+
+For detailed instructions on deploying the site in production, see [www/README.md](www/README.md#production).
 
 ### Markdown style
 
@@ -19,26 +112,141 @@ style, as encoded in our [markdownlint configuration](.markdownlint.yaml). In
 addition we prefer to keep our Markdown documents wrapped at 80 columns (though
 this is not currently enforced).
 
+To check (and fix) style problems before sending a PR you can run linting
+locally.
+
+#### Setup npm (if you haven't already)
+
+```shell
+sudo apt install npm # or something similar for your system
+npm install # or `npm ci --ignore-scripts` for a clean install
+```
+
+#### Run the linter
+
+```shell
+npm run lint --silent && ./tools/lint.sh
+```
+
+#### Autofix the errors
+
+```shell
+npm run format && ./tools/lint.sh
+```
+
+### Pull request conventions
+
+[pull request conventions]: #pull-request-conventions
+
+PRs are expected to meet the following conventions:
+
+-   PR title follows [Conventional Commits][][^semantic-action] using the form
+    `<type>: <subject>`, where:
+    -   `<type>` is one of the values in the [table below](#pull-request-types).
+    -   `<subject>` concisely explains *what* the PR does.
+-   PR body explains *what* and *why* in a bit more detail, providing
+    enough context for a reader to understand the change. See
+    [Writing good CL descriptions](https://google.github.io/eng-practices/review/developer/cl-descriptions.html)
+    for more advice (in that doc, "CL" means PR and "first line" means PR title;
+    ignore the section about tags.)
+-   PR title and body use imperative tense, e.g. "update X" (not "updated
+    X" or "updates X").
+-   Every commit has a [signed-off-by] tag.
+    -   Note: Commit messages do not otherwise matter because we use the [squash
+        and merge] method, with the PR title and body as the squash
+        commit message.
+-   Example of a good PR title and body:
+    https://github.com/slsa-framework/slsa/pull/840 (predates our `<type>`
+    convention).
+
+[^semantic-action]: As implemented via [action-semantic-pull-request].
+
+[Conventional Commits]: https://www.conventionalcommits.org/en/v1.0.0/
+[action-semantic-pull-request]: https://github.com/amannn/action-semantic-pull-request
+
+### Pull request types
+
+Every PR must be categorized using one of the following `<type>` values. The
+purpose is twofold: to make it easier for readers to understand the scope of the
+PR at a glance, and to allow us to adjust the minimum review period and number
+of approvers based on how sensitive the PR is.
+
+Use the closest entry in the table that applies, selecting the first one if
+multiple apply. If you are not sure which type to use, take a guess and a
+maintainer will update if needed. See [review and approval] for the meaning of
+"waiting period" and "# approvers".
+
+| Type | Meaning | Waiting period | # Approvers
+| --- | --- | --- | ---
+| `content` | A change to the meaning of the specification. Must include a [changelog entry]. | 72h | 3
+| `editorial` | A clarification to the specification that does not change its meaning, beyond a simple `fix`. | 24h | 2
+| `nonspec` | A change to a non-specification, non-blog page, beyond a simple `fix`. | 24h | 2
+| `blog` | A new or updated blog post. (Do not mix with categories above.) | 24h | 2
+| `fix` | A fix for obvious typos, broken links, and similar. | 0h | 1
+| `style` | A user-visible style or layout change. No content changes. | 0h | 1
+| `impl` | A user-invisible change, such as editing a README or the repo configuration. | 0h | 1
+
+Note 1: PR authors with write access to the repo count as second or third
+approvers for their own PRs. For example, if the author of a PR with the
+`content` type has write access to the repo, then the PR only requires
+two additional approvers before merging. However, a PR with the `impl` type
+always requires one reviewer, even if the author has write access.
+
+Note 2: If the PR only touches files in the [Draft](www/spec-stages.md)
+specification stage, then the "waiting period" and "# reviewers" are relaxed and
+up to Maintainer discretion (including the PR author if they're a maintainer). Note
+that a relaxed number of reviewers and waiting period may result in more back
+and forth with the expanded set of reviewers as drafts are finalized.
+Drafts should be indicated in the PR title following a pattern of `<type>: draft: <subject>`.
+Files in the Draft stage have a large banner at the top of each rendered page,
+as well as the text "Status: Draft".
+
+[squash and merge]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges#squash-and-merge-your-commits
+
+### Changelog entry
+
+[changelog entry]: #changelog-entry
+
+All `content` changes to the specification should also include a brief
+description of the change in the adjacent `whats-new.md` file, in order to help
+readers of an updated version of the specification to more easily identify
+changes.
+
 ### Review and approval
 
-All changes require peer review through GitHub's pull request feature.
+[review and approval]: #review-and-approval
 
--   Changes to the specification, such as [Requirements](docs/requirements.md)
-    or the [Provenance schema](docs/provenance/), require approval from **two
-    steering committee members**, unless the change does not affect the meaning
-    (e.g. typo fix or minor reformatting.)
+Review process:
 
-    -   Do an initial round of review with a single reviewer.
-    -   Add @slsa-framework/slsa-steering-committee as a reviewer and make it
-        clear that you are looking for at least two approvers.
-    -   Wait at least one week before submitting to give the community time to
-        comment.
+1.  Ensure that the PR meets the [pull request conventions].
 
--   Other changes only require **one approver**. Any member of @slsa-framework
-    can approve. There is no requirement for the author and reviewer to
-    represent different companies/organizations.
+2.  If there is a particular set of maintainers you've been working with, feel
+    free to assign the PR to them.  If they don't have time to review they
+    should feel free to assign to someone else, or provide feedback on when
+    they can get to it.  Otherwise, assign to
+    `@slsa-framework/specification-maintainers`.
+    -   Feel free to ping the reviwers in the
+    [slsa-specification Slack](https://openssf.slack.com/archives/C03NUSAPKC6)
+    when the PR is ready for review.
+    -   You will need a different number of approvals for different
+    [PR types](#pull-request-types). Your reviewers may ask that you use a
+    different PR type.
+
+3.  Wait an appropriate amount of time to allow for lazy consensus. Different
+    types have different minimum waiting periods. The waiting period begins at
+    the timestamp of the last substantial change to the PR.
+    -   If a few days have passed without any feedback please feel free to ping
+    the PR and [in Slack](https://openssf.slack.com/archives/C03NUSAPKC6).
+
+4.  Once the waiting period has passed, a maintainer will merge your PR. Expect
+    your PR to be squashed+merged unless your reviewers advise you otherwise.
+    If your PR has not been merged within 48h of the waiting period having
+    passed, and a reason for that has not been added as a PR comment, use the
+    PR's comment thread to request the PR be merged.
 
 ### Signing your work
+
+[signed-off-by]: #signing-your-work
 
 When contributing patches to the project via pull request, please indicate that
 you wrote the patch or have permission to pass it on by including your sign-off.
@@ -92,3 +300,75 @@ You can automatically append a sign-off to a commit by passing the `-s` /
 
 **Note**: this requires your `user.name` and `user.email` are set correctly
 in your git config.
+
+## SLSA versions management
+
+The main working draft is located in the `spec` folder with the various versions in branches a la "releases/v0.1", "releases/v1.0", etc.
+
+`spec` is where all new work should take place. To publish a new version of the SLSA specification, create a new branch (e.g., `releases/v1.1`) and make the necessary changes to the spec folder on that branch: it is possible for instance that not all that is in the draft should be included in which case you will need to remove that content, and several config and navigation files need to be updated such as:
+
+```none
+www/_data/nav/config.yml
+www/_data/nav/v1.1.yml (corresponding to the version you are creating)
+www/_data/versions.yml
+www/_redirects
+```
+
+To patch a specific version of the specification, the changes should be made to both the corresponding branch as well as, if applicable, all the later versions and the draft on the main branch.
+
+To compare the changes between two versions you may find it handy to use the [diff site script](https://github.com/slsa-framework/slsa/tree/main/www#comparing-built-versions).
+
+**Note**: When publishing new versions of the SLSA specification, make sure to follow the [Specification stages and versions documentation](www/spec-stages.md) and the [Specification Development Process](https://github.com/slsa-framework/governance/blob/main/5._Governance.md#4-specification-development-process) to ensure compliance with the [Community Specification License](https://github.com/slsa-framework/governance/blob/main/1._Community_Specification_License-v1.md).
+
+## Netlify and Jekylll
+
+The website https://slsa.dev is built with Jekyll and served by Netlify where we have an account managed by the Steering Committee. Netlify is setup to monitor the GitHub repository and automatically deploy updates when a PR is merged on main.
+
+The netlify configuration is in the `/netlify.toml` file. This file overrides settings defined on the Netlify admin control panel where we need to say little more than which repository and branch to monitor.
+
+At deployment time, the website is built in several steps. First, we take all the different versions of the spec from the branches and copy them into corresponding `www/spec/<version>` folders. Then, the jekyll build is run to generate the website files in `www/_site` which is then deployed by netlify.
+
+For more information see the [www/README.md](www/README.md) file.
+
+## Workstream lifecycle
+
+Major workstreams that require considerable effort, such as a new release, a new
+track, or a new level, should have a top-level GitHub issue and a shepherd to
+oversee the workstream and move it along. Without a shepherd, a workstream is
+likely to stagnate. If you would like to be a shepherd for a workstream, just
+nominate yourself in the issue.
+
+Responsibilities of the shepherd:
+
+-   Maintaining the top-level GitHub issue to track the overall workstream
+-   Breaking down the workstream into tasks
+-   Pinging open issues and pull requests when stale
+-   Getting consensus among Contributors and Maintainers
+-   Suggesting priorities
+-   Providing regular updates to the community
+-   Adding a workstream entry in [README.md](README.md)
+
+Template for GitHub issue:
+
+-   Title: `Workstream: <name>`
+-   Assignee: \<shepherd\>
+-   Labels: [`workstream`](https://github.com/slsa-framework/slsa/labels/workstream)
+-   Description:
+
+    ```markdown
+    This is a tracking issue for [SHORT DESCRIPTION].
+
+    [Workstream shepherd]: YOUR NAME (@GITHUB_USERNAME)
+
+    Sub-issues:
+
+    -   [ ] #1234
+    -   [ ] #4568
+
+    [Workstream shepherd]: https://github.com/slsa-framework/slsa/blob/main/CONTRIBUTING.md#workstream-lifecycle
+
+    ---
+
+    [any other text]
+
+    ```
